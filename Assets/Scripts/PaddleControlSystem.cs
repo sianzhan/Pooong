@@ -45,15 +45,16 @@ namespace Pooong
         }
 
         [BurstCompile]
-        public void UpdatePaddlePosition(ref SystemState state, float offset)
+        public void UpdatePaddlePosition(ref SystemState state, in float offset)
         {
             foreach (var (paddle, transform, physicsVelocity)
             in SystemAPI.Query<RefRO<Paddle>, RefRO<LocalTransform>, RefRW<PhysicsVelocity>>())
             {
-                if (paddle.ValueRO.Side == Paddle.PaddleSide.Left) offset = -offset;
+                var elevation = offset;
+                if (paddle.ValueRO.Side == Paddle.PaddleSide.Left) elevation = -elevation;
 
                 var currentY = transform.ValueRO.Position.y;
-                var targetY = paddle.ValueRO.InitialPosition.y + offset;
+                var targetY = paddle.ValueRO.InitialPosition.y + elevation;
                 var displacement = targetY - currentY;
 
                 var velocity = displacement / SystemAPI.Time.DeltaTime;
@@ -63,7 +64,7 @@ namespace Pooong
         }
 
         [BurstCompile]
-        public void UpdateCartPosition(ref SystemState state, float offset)
+        public void UpdateCartPosition(ref SystemState state, in float offset)
         {
             foreach (var (cart, transform, physicsVelocity)
             in SystemAPI.Query<RefRO<Cart>, RefRO<LocalTransform>, RefRW<PhysicsVelocity>>())
