@@ -24,7 +24,7 @@ namespace Pooong
             var ecbSingleton = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
             var ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
 
-            state.Dependency = new HeartCollisionEventJob
+            state.Dependency = new HeartOnBreakerCollisionEventJob
             {
                 HeartLookup = heartLookup,
                 HeartBreakerLookup = heartBreakerLookup,
@@ -35,7 +35,7 @@ namespace Pooong
         }
 
         [BurstCompile]
-        public partial struct HeartCollisionEventJob : ICollisionEventsJob
+        public partial struct HeartOnBreakerCollisionEventJob : ICollisionEventsJob
         {
             public ComponentLookup<Heart> HeartLookup;
             public ComponentLookup<HeartBreaker> HeartBreakerLookup;
@@ -59,6 +59,9 @@ namespace Pooong
                 else return;
 
                 var heart = HeartLookup.GetRefRO(heartEntity);
+
+                if (!heart.ValueRO.Breakable) return;
+
                 var transform = TransformLookup.GetRefRO(heartEntity);
 
                 LinkedLookup.TryGetBuffer(heart.ValueRO.FragileHeartPrefab, out DynamicBuffer<LinkedEntityGroup> linkedEntityGroup);

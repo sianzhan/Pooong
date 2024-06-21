@@ -5,6 +5,7 @@ namespace Pooong
 {
     public class HeartAuthoring : MonoBehaviour
     {
+        public bool Breakable = true;
         public GameObject FragileHeartPrefab;
 
         public class Baker : Baker<HeartAuthoring>
@@ -15,7 +16,8 @@ namespace Pooong
 
                 AddComponent(entity, new Heart
                 {
-                    FragileHeartPrefab = GetEntity(authoring.FragileHeartPrefab, TransformUsageFlags.Dynamic),
+                    Breakable = authoring.Breakable,
+                    FragileHeartPrefab = GetEntity(authoring.FragileHeartPrefab, TransformUsageFlags.Dynamic)
                 });
             }
         }
@@ -23,6 +25,7 @@ namespace Pooong
 
     public struct Heart : IComponentData
     {
+        public bool Breakable;
         public Entity FragileHeartPrefab;
     }
 }

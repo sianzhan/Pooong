@@ -248,7 +248,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_MotionType: 0
   m_Smoothing: 0
-  m_Mass: 1
+  m_Mass: 10
   m_LinearDamping: 0.01
   m_AngularDamping: 0.05
   m_InitialLinearVelocity:
@@ -317,4 +317,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f8477de6dd7c4143a8c4b148f6e5f27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Breakable: 1
   FragileHeartPrefab: {fileID: 3525907088923482488, guid: 3c8d48cb209db9949a0a5033f778c01c, type: 3}
