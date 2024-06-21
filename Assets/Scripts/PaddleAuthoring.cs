@@ -1,4 +1,5 @@
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Pooong
@@ -15,6 +16,7 @@ namespace Pooong
 
                 AddComponent(entity, new Paddle
                 {
+                    InitialPosition = authoring.transform.position,
                     Side = authoring.Side
                 });
             }
@@ -29,6 +31,7 @@ namespace Pooong
             Right
         }
 
+        public float3 InitialPosition;
         public PaddleSide Side;
     }
 }

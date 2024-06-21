@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 namespace Pooong
 {
+    [BurstCompile]
     partial class PlayerInputSystem : SystemBase
     {
         InputAction moveAction;
