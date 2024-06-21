@@ -10,6 +10,12 @@ namespace Pooong
     partial struct HeartSpawningSystem : ISystem
     {
         [BurstCompile]
+        public void OnCreate(ref SystemState state)
+        {
+            state.RequireForUpdate<PooongConfig>();
+        }
+
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             if (GetHeartCount(ref state) < SystemAPI.GetSingleton<PooongConfig>().MaxConcurrentHeartAmount)

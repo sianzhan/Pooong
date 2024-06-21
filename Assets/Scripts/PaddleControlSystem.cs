@@ -14,7 +14,7 @@ namespace Pooong
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<Paddle>();
+            state.RequireForUpdate<PooongConfig>();
 
             state.EntityManager.AddComponent<PaddleControlData>(state.SystemHandle);
         }

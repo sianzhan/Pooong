@@ -7,6 +7,12 @@ namespace Pooong
     partial struct HeartCartInSystem : ISystem
     {
         [BurstCompile]
+        public void OnCreate(ref SystemState state)
+        {
+            state.RequireForUpdate<PooongConfig>();
+        }
+
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             var simulation = SystemAPI.GetSingleton<SimulationSingleton>();
