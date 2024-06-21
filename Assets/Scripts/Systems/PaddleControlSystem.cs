@@ -15,6 +15,7 @@ namespace Pooong
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<PooongConfig>();
+            state.RequireForUpdate<PlayerInputData>();
 
             state.EntityManager.AddComponent<PaddleControlData>(state.SystemHandle);
         }
@@ -35,8 +36,11 @@ namespace Pooong
             var config = SystemAPI.GetSingleton<PooongConfig>();
 
             var offset = paddleControlData.ValueRO.OffSet;
+            var change = playerInputData.MoveValue.x * config.PlayerMovementInputSensitivity;
 
-            offset += playerInputData.MoveValue.x * config.PlayerMovementInputSensitivity;
+            if (playerInputData.SlowModeToggled) change *= config.SlowFactor;
+
+            offset += change;
             offset = math.clamp(offset, -config.MaxPaddleMovementOffset, config.MaxPaddleMovementOffset);
 
             paddleControlData.ValueRW.OffSet = offset;

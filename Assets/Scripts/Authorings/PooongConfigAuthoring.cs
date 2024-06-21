@@ -9,6 +9,7 @@ namespace Pooong
         public float MaxPaddleMovementOffset = 5f;
         public float PlayerMovementInputSensitivity = 0.1f;
         public float GravityFactorInCart = 20f;
+        public float SlowFactor = 0.5f;
 
         public class Baker : Baker<PooongConfigAuthoring>
         {
@@ -21,7 +22,8 @@ namespace Pooong
                     MaxConcurrentHeartAmount = authoring.MaxConcurrentHeartAmount,
                     MaxPaddleMovementOffset = authoring.MaxPaddleMovementOffset,
                     PlayerMovementInputSensitivity = authoring.PlayerMovementInputSensitivity,
-                    GravityFactorInCart = authoring.GravityFactorInCart
+                    GravityFactorInCart = authoring.GravityFactorInCart,
+                    SlowFactor = authoring.SlowFactor
                 });
             }
         }
@@ -33,5 +35,6 @@ namespace Pooong
         public float MaxPaddleMovementOffset;
         public float PlayerMovementInputSensitivity;
         public float GravityFactorInCart;
+        public float SlowFactor;
     }
 }
