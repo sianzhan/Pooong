@@ -73,11 +73,13 @@ namespace Pooong
         [BurstCompile]
         public void UpdateCartPosition(ref SystemState state, in float offset)
         {
+            var config = SystemAPI.GetSingleton<PooongConfig>();
+
             foreach (var (cart, transform, physicsVelocity)
             in SystemAPI.Query<RefRO<Cart>, RefRO<LocalTransform>, RefRW<PhysicsVelocity>>())
             {
                 var currentX = transform.ValueRO.Position.x;
-                var targetX = (cart.ValueRO.InitialPosition.x + offset) * 1.2f;
+                var targetX = (cart.ValueRO.InitialPosition.x + offset) * config.CartMovementFactor;
                 var displacement = targetX - currentX;
 
                 var velocity = displacement / SystemAPI.Time.DeltaTime;
