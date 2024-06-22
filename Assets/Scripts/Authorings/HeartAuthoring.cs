@@ -16,7 +16,7 @@ namespace Pooong
 
                 AddComponent(entity, new Heart
                 {
-                    Breakable = authoring.Breakable,
+                    Breakable = authoring.Breakable ? 1 : 0,
                     FragileHeartPrefab = GetEntity(authoring.FragileHeartPrefab, TransformUsageFlags.Dynamic)
                 });
             }
@@ -25,7 +25,7 @@ namespace Pooong
 
     public struct Heart : IComponentData
     {
-        public bool Breakable;
+        public int Breakable;
         public Entity FragileHeartPrefab;
     }
 }

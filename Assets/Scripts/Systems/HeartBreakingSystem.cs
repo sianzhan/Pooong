@@ -67,9 +67,11 @@ namespace Pooong
                 }
                 else return;
 
-                var heart = HeartLookup.GetRefRO(heartEntity);
+                var heart = HeartLookup.GetRefRW(heartEntity);
 
-                if (!heart.ValueRO.Breakable) return;
+                if (heart.ValueRO.Breakable == 0) return;
+
+                Interlocked.Exchange(ref heart.ValueRW.Breakable, 0);
 
                 var transform = TransformLookup.GetRefRO(heartEntity);
 
@@ -80,7 +82,7 @@ namespace Pooong
                     Ecb.SetComponent(child.Value, LocalTransform.FromPosition(transform.ValueRO.Position));
                 }
 
-                var entity = Ecb.Instantiate(heart.ValueRO.FragileHeartPrefab);
+                Ecb.Instantiate(heart.ValueRO.FragileHeartPrefab);
 
                 Ecb.DestroyEntity(heartEntity);
 

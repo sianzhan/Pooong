@@ -74,7 +74,8 @@ namespace Pooong
                 var heart = HeartLookup.GetRefRW(heartEntity);
                 var gravity = GravityLookup.GetRefRW(heartEntity);
 
-                heart.ValueRW.Breakable = false;
+                Interlocked.Exchange(ref heart.ValueRW.Breakable, 0);
+                
                 gravity.ValueRW.Value = Config.GravityFactorInCart;
 
                 Ecb.AddComponent(heartEntity, new CartItem());
