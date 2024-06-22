@@ -320,6 +320,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 826e5f10a27444d42b7cf7dce5427ad4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MoveAnims:
+  - {fileID: 21300000, guid: 416609612734e7a4ab3d9eb5fb9ff645, type: 3}
+  - {fileID: 21300000, guid: a8e21285a6a18a34385b4f9013ba5f76, type: 3}
 --- !u!1 &433819412
 GameObject:
   m_ObjectHideFlags: 0
