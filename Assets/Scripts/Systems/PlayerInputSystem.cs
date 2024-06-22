@@ -9,13 +9,13 @@ namespace Pooong
     partial class PlayerInputSystem : SystemBase
     {
         InputAction moveAction;
-        InputAction slowAction;
+        InputAction rushAction;
 
         [BurstCompile]
         protected override void OnCreate()
         {
             moveAction = InputSystem.actions.FindAction("Move");
-            slowAction = InputSystem.actions.FindAction("Slow");
+            rushAction = InputSystem.actions.FindAction("Rush");
 
             EntityManager.AddComponent<PlayerInputData>(SystemHandle);
         }
@@ -26,7 +26,7 @@ namespace Pooong
             var playerInputData = SystemAPI.GetSingletonRW<PlayerInputData>();
 
             playerInputData.ValueRW.MoveValue = moveAction.ReadValue<Vector2>();
-            playerInputData.ValueRW.SlowModeToggled = slowAction.IsPressed();
+            playerInputData.ValueRW.RushModeToggled = rushAction.IsPressed();
 
         }
     }

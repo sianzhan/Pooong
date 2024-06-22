@@ -10,7 +10,7 @@ namespace Pooong
         public float MaxPaddleMovementOffset = 5f;
         public float PlayerMovementInputSensitivity = 0.1f;
         public float GravityFactorInCart = 20f;
-        public float SlowFactor = 0.5f;
+        public float RushFactor = 2f;
         public float CartMovementFactor = 1f;
         public int TargetHeartCount = 30;
         public PooongStageConfig[] StageConfigs;
@@ -27,7 +27,7 @@ namespace Pooong
                     MaxPaddleMovementOffset = authoring.MaxPaddleMovementOffset,
                     PlayerMovementInputSensitivity = authoring.PlayerMovementInputSensitivity,
                     GravityFactorInCart = authoring.GravityFactorInCart,
-                    SlowFactor = authoring.SlowFactor,
+                    RushFactor = authoring.RushFactor,
                     CartMovementFactor = authoring.CartMovementFactor,
                     TargetHeartCount = authoring.TargetHeartCount
                 });
@@ -44,7 +44,7 @@ namespace Pooong
         public float MaxPaddleMovementOffset;
         public float PlayerMovementInputSensitivity;
         public float GravityFactorInCart;
-        public float SlowFactor;
+        public float RushFactor;
         public float CartMovementFactor;
         public int TargetHeartCount;
     }

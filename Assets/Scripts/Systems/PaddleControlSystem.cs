@@ -41,7 +41,7 @@ namespace Pooong
             var offset = paddleControlData.ValueRO.OffSet;
             var change = playerInputData.MoveValue.x * config.PlayerMovementInputSensitivity;
 
-            if (playerInputData.SlowModeToggled) change *= config.SlowFactor;
+            if (playerInputData.RushModeToggled) change *= config.RushFactor;
 
             offset += change;
             offset = math.clamp(offset, -config.MaxPaddleMovementOffset, config.MaxPaddleMovementOffset);

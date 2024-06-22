@@ -892,9 +892,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxConcurrentHeartAmount: 5
   MaxPaddleMovementOffset: 7
-  PlayerMovementInputSensitivity: 0.5
+  PlayerMovementInputSensitivity: 0.25
   GravityFactorInCart: 20
-  SlowFactor: 0.5
+  RushFactor: 2
   CartMovementFactor: 1.25
   TargetHeartCount: 30
   StageConfigs:
