@@ -4,6 +4,8 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
+using UnityEngine;
+using UnityEngine.U2D;
 
 namespace Pooong
 {
@@ -26,6 +28,7 @@ namespace Pooong
             var offset = UpdatePaddleOffset(ref state);
             UpdatePaddlePosition(ref state, offset);
             UpdateCartPosition(ref state, offset);
+            UpdateMeerkatSide(ref state, offset);
         }
 
         [BurstCompile]
@@ -74,12 +77,31 @@ namespace Pooong
             in SystemAPI.Query<RefRO<Cart>, RefRO<LocalTransform>, RefRW<PhysicsVelocity>>())
             {
                 var currentX = transform.ValueRO.Position.x;
-                var targetX = cart.ValueRO.InitialPosition.x + offset;
+                var targetX = (cart.ValueRO.InitialPosition.x + offset) * 1.2f;
                 var displacement = targetX - currentX;
 
                 var velocity = displacement / SystemAPI.Time.DeltaTime;
 
                 physicsVelocity.ValueRW.Linear.x = velocity;
+            }
+        }
+
+        [BurstCompile]
+        public void UpdateMeerkatSide(ref SystemState state, in float offset)
+        {
+            foreach (var (meerkat, transform, matrix)
+            in SystemAPI.Query<RefRO<Meerkat>, RefRW<LocalTransform>, RefRW<PostTransformMatrix>>())
+            {
+                if (offset > 4)
+                {
+                    transform.ValueRW.Position.x = -meerkat.ValueRO.InitialPosition.x;
+                    matrix.ValueRW.Value = float4x4.Scale(-1, 1, 1);
+                }
+                else if (offset < -4)
+                {
+                    transform.ValueRW.Position.x = meerkat.ValueRO.InitialPosition.x;
+                    matrix.ValueRW.Value = float4x4.Scale(1, 1, 1);
+                }
             }
         }
     }
