@@ -1,10 +1,11 @@
 using Unity.Entities;
-using Unity.Collections;
 
 namespace Pooong
 {
     public struct GameState : IComponentData
     {
+        public bool Running;
+        public bool MissionAccomplished;
         public int CurrentStage;
         public int AmountSpawnedThisStage;
         public int CartedHeartCount;

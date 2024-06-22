@@ -1,5 +1,4 @@
 using System;
-using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
@@ -54,7 +53,7 @@ namespace Pooong
     public struct PooongStageConfig : IBufferElementData
     {
         public int RequiredHearts;
-        public int AvailableHearts;
+        public int Lives;
         public int MaxConcurrentHearts;
         public float InitialHeartVelocityMin;
         public float InitialHeartVelocityMax;

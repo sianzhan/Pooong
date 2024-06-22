@@ -1,5 +1,5 @@
+using System;
 using Pooong;
-using Unity.Burst;
 using Unity.Entities;
 
 partial class UIUpdateSystem : SystemBase
@@ -8,22 +8,32 @@ partial class UIUpdateSystem : SystemBase
     public int CartedHeartTarget;
     public int BrokenHeartCount;
     public int BrokenHeartTarget;
+    public Action<bool> GameEnded;
 
-    [BurstCompile]
+    private bool ended = false;
+
     protected override void OnCreate()
     {
         RequireForUpdate<GameState>();
     }
 
-    [BurstCompile]
     protected override void OnUpdate()
     {
+        if (ended) return;
+
         var gameState = SystemAPI.GetSingleton<GameState>();
 
-        CartedHeartCount = gameState.CartedHeartCount;
-        CartedHeartTarget = gameState.TargetCartedHeartCount;
-        BrokenHeartCount = gameState.BrokenHeartCount;
-        BrokenHeartTarget = gameState.TargetBrokenHeartCount;
-
+        if (gameState.Running)
+        {
+            CartedHeartCount = gameState.CartedHeartCount;
+            CartedHeartTarget = gameState.TargetCartedHeartCount;
+            BrokenHeartCount = gameState.BrokenHeartCount;
+            BrokenHeartTarget = gameState.TargetBrokenHeartCount;
+        }
+        else
+        {
+            GameEnded.Invoke(gameState.MissionAccomplished);
+            ended = false;
+        }
     }
 }

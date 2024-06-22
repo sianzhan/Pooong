@@ -1,26 +1,25 @@
 using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
-using Unity.Entities.UniversalDelegates;
-using UnityEngine.InputSystem.LowLevel;
 
 namespace Pooong
 {
     partial struct GameplaySystem : ISystem
     {
-        EntityQuery queryCartedHeart;
-
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
             state.EntityManager.AddComponent<GameState>(state.SystemHandle);
 
-            var entity = state.EntityManager.CreateEntity();
+            state.EntityManager.SetComponentData<GameState>(state.SystemHandle, new GameState
+            {
+                Running = true,
+                CurrentStage = 0,
+                TargetCartedHeartCount = 999,
+                TargetBrokenHeartCount = 999
+            });
 
             state.RequireForUpdate<PooongConfig>();
             state.RequireForUpdate<PooongStageConfig>();
-
-            queryCartedHeart = SystemAPI.QueryBuilder().WithAll<Heart, CartItem>().Build();
         }
 
         [BurstCompile]
@@ -29,19 +28,24 @@ namespace Pooong
             var config = SystemAPI.GetSingleton<PooongConfig>();
             var stageConfigs = SystemAPI.GetSingletonBuffer<PooongStageConfig>();
             var gameState = SystemAPI.GetSingletonRW<GameState>();
-            var countHeartCarted = queryCartedHeart.CalculateEntityCount();
 
-            if (gameState.ValueRO.CurrentStage + 1 >= stageConfigs.Length)
+            if (!gameState.ValueRO.Running) return;
+
+            if (gameState.ValueRO.CartedHeartCount >= gameState.ValueRO.TargetCartedHeartCount)
             {
-                if (queryCartedHeart.CalculateEntityCount() >= config.TargetHeartCount)
-                {
-                    // End game
-                }
-
-                return;
+                gameState.ValueRW.MissionAccomplished = true;
+                gameState.ValueRW.Running = false;
+            }
+            else if (gameState.ValueRO.BrokenHeartCount >= gameState.ValueRO.TargetBrokenHeartCount)
+            {
+                gameState.ValueRW.MissionAccomplished = false;
+                gameState.ValueRW.Running = false;
             }
 
-            if (countHeartCarted >= stageConfigs[gameState.ValueRO.CurrentStage + 1].RequiredHearts)
+            if (!gameState.ValueRO.Running) return;
+            if (gameState.ValueRO.CurrentStage + 1 >= stageConfigs.Length) return;
+
+            if (gameState.ValueRO.CartedHeartCount >= stageConfigs[gameState.ValueRO.CurrentStage + 1].RequiredHearts)
             {
                 GoToNextStage(gameState, config, stageConfigs[gameState.ValueRO.CurrentStage + 1]);
             }
@@ -52,7 +56,7 @@ namespace Pooong
             gameState.ValueRW.AmountSpawnedThisStage = 0;
             gameState.ValueRW.CurrentStage += 1;
             gameState.ValueRW.TargetCartedHeartCount = config.TargetHeartCount;
-            gameState.ValueRW.TargetBrokenHeartCount = stageConfig.AvailableHearts;
+            gameState.ValueRW.TargetBrokenHeartCount = stageConfig.Lives;
         }
     }
 }

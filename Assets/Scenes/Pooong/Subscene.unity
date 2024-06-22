@@ -145,7 +145,7 @@ Transform:
   m_GameObject: {fileID: 299413873}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.5, z: 0}
+  m_LocalPosition: {x: 0, y: -1.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -170,7 +170,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 6, y: 0.5, z: 1}
+  m_Size: {x: 6, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &299413876
 MonoBehaviour:
@@ -899,47 +899,47 @@ MonoBehaviour:
   TargetHeartCount: 30
   StageConfigs:
   - RequiredHearts: 0
-    AvailableHearts: 0
+    Lives: 0
     MaxConcurrentHearts: 0
     InitialHeartVelocityMin: 0
     InitialHeartVelocityMax: 0
     SpawnRadius: 0
     SpawnInterval: 0
   - RequiredHearts: 0
-    AvailableHearts: 10
+    Lives: 10
     MaxConcurrentHearts: 1
     InitialHeartVelocityMin: 7
     InitialHeartVelocityMax: 7
     SpawnRadius: 1
     SpawnInterval: 1
-  - RequiredHearts: 3
-    AvailableHearts: 20
+  - RequiredHearts: 2
+    Lives: 20
     MaxConcurrentHearts: 2
     InitialHeartVelocityMin: 7
     InitialHeartVelocityMax: 10
     SpawnRadius: 1
     SpawnInterval: 1
-  - RequiredHearts: 10
-    AvailableHearts: 30
+  - RequiredHearts: 5
+    Lives: 30
     MaxConcurrentHearts: 3
     InitialHeartVelocityMin: 8
     InitialHeartVelocityMax: 12
     SpawnRadius: 2
     SpawnInterval: 0.5
-  - RequiredHearts: 15
-    AvailableHearts: 50
+  - RequiredHearts: 10
+    Lives: 50
     MaxConcurrentHearts: 5
     InitialHeartVelocityMin: 10
     InitialHeartVelocityMax: 15
     SpawnRadius: 3
     SpawnInterval: 0.5
-  - RequiredHearts: 25
-    AvailableHearts: 100
+  - RequiredHearts: 20
+    Lives: 200
     MaxConcurrentHearts: 20
     InitialHeartVelocityMin: 10
     InitialHeartVelocityMax: 15
     SpawnRadius: 3
-    SpawnInterval: 0
+    SpawnInterval: 0.1
 --- !u!4 &1486500561
 Transform:
   m_ObjectHideFlags: 0

@@ -2,7 +2,6 @@ using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
-using Unity.Physics.Extensions;
 using Unity.Transforms;
 
 namespace Pooong
@@ -45,8 +44,8 @@ namespace Pooong
         {
             var heartCount = GetFreeHeartCount(ref state);
 
+            if (!game.ValueRO.Running) return false;
             if (heartCount >= currentStageConfig.MaxConcurrentHearts) return false;
-            if (game.ValueRO.AmountSpawnedThisStage >= currentStageConfig.AvailableHearts) return false;
             if (SystemAPI.Time.ElapsedTime < game.ValueRO.LastSpawnTime + currentStageConfig.SpawnInterval) return false;
 
             return true;
