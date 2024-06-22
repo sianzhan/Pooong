@@ -30,6 +30,9 @@ namespace Pooong
         {
             var handle = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<UIUpdateSystem>();
 
+            var ratio = (float)handle.BrokenHeartCount / handle.BrokenHeartTarget * 0.8f + 0.2f;
+            BrokenHeartCountText.color = Color.HSVToRGB(0.97f, 1f, ratio);
+
             CartedHeartCountText.SetText(handle.CartedHeartCount.ToString());
             CartedHeartTargetText.SetText(handle.CartedHeartTarget.ToString());
             BrokenHeartCountText.SetText(handle.BrokenHeartCount.ToString());
