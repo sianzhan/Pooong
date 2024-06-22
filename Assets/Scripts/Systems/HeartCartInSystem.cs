@@ -1,6 +1,8 @@
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Physics;
+using System.Threading;
+using Unity.Collections.LowLevel.Unsafe;
 
 namespace Pooong
 {
@@ -18,9 +20,11 @@ namespace Pooong
             var simulation = SystemAPI.GetSingleton<SimulationSingleton>();
             var heartLookup = SystemAPI.GetComponentLookup<Heart>();
             var cartLookup = SystemAPI.GetComponentLookup<Cart>();
+            var cartItemLookup = SystemAPI.GetComponentLookup<CartItem>();
             var massLookup = SystemAPI.GetComponentLookup<PhysicsMass>();
             var gravityLookup = SystemAPI.GetComponentLookup<PhysicsGravityFactor>();
             var config = SystemAPI.GetSingleton<PooongConfig>();
+            var gameState = SystemAPI.GetSingletonRW<GameState>();
 
             var ecbSingleton = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
             var ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
@@ -29,9 +33,11 @@ namespace Pooong
             {
                 HeartLookup = heartLookup,
                 CartLookup = cartLookup,
+                CartItemLookup = cartItemLookup,
                 MassLookup = massLookup,
                 GravityLookup = gravityLookup,
                 Config = config,
+                GameState = gameState,
                 Ecb = ecb
             }.Schedule(simulation, state.Dependency);
         }
@@ -42,8 +48,10 @@ namespace Pooong
             public PooongConfig Config;
             public ComponentLookup<Heart> HeartLookup;
             public ComponentLookup<Cart> CartLookup;
+            public ComponentLookup<CartItem> CartItemLookup;
             public ComponentLookup<PhysicsMass> MassLookup;
             public ComponentLookup<PhysicsGravityFactor> GravityLookup;
+            [NativeDisableUnsafePtrRestriction] public RefRW<GameState> GameState;
             public EntityCommandBuffer Ecb;
 
             [BurstCompile]
@@ -61,6 +69,8 @@ namespace Pooong
                 }
                 else return;
 
+                if (CartItemLookup.HasComponent(heartEntity)) return;
+
                 var heart = HeartLookup.GetRefRW(heartEntity);
                 var gravity = GravityLookup.GetRefRW(heartEntity);
 
@@ -68,6 +78,8 @@ namespace Pooong
                 gravity.ValueRW.Value = Config.GravityFactorInCart;
 
                 Ecb.AddComponent(heartEntity, new CartItem());
+
+                Interlocked.Increment(ref GameState.ValueRW.CartedHeartCount);
             }
         }
     }

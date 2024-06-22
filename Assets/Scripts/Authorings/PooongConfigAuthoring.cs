@@ -13,6 +13,7 @@ namespace Pooong
         public float GravityFactorInCart = 20f;
         public float SlowFactor = 0.5f;
         public float CartMovementFactor = 1f;
+        public int TargetHeartCount = 30;
         public PooongStageConfig[] StageConfigs;
 
         public class Baker : Baker<PooongConfigAuthoring>
@@ -29,6 +30,7 @@ namespace Pooong
                     GravityFactorInCart = authoring.GravityFactorInCart,
                     SlowFactor = authoring.SlowFactor,
                     CartMovementFactor = authoring.CartMovementFactor,
+                    TargetHeartCount = authoring.TargetHeartCount
                 });
 
                 var stageConfigs = AddBuffer<PooongStageConfig>(entity);
@@ -45,6 +47,7 @@ namespace Pooong
         public float GravityFactorInCart;
         public float SlowFactor;
         public float CartMovementFactor;
+        public int TargetHeartCount;
     }
 
     [Serializable]

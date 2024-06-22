@@ -896,6 +896,7 @@ MonoBehaviour:
   GravityFactorInCart: 20
   SlowFactor: 0.5
   CartMovementFactor: 1.25
+  TargetHeartCount: 30
   StageConfigs:
   - RequiredHearts: 0
     AvailableHearts: 0

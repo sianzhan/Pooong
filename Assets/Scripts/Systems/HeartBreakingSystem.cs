@@ -1,10 +1,10 @@
-using System.Diagnostics;
-using Pooong;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
+using System.Threading;
+using Unity.Collections.LowLevel.Unsafe;
 
 namespace Pooong
 {
@@ -13,6 +13,12 @@ namespace Pooong
     partial struct HeartBreakingSystem : ISystem
     {
         [BurstCompile]
+        public void OnCreate(ref SystemState state)
+        {
+            state.RequireForUpdate<GameState>();
+        }
+
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             var simulation = SystemAPI.GetSingleton<SimulationSingleton>();
@@ -20,6 +26,7 @@ namespace Pooong
             var heartBreakerLookup = SystemAPI.GetComponentLookup<HeartBreaker>();
             var transformLookup = SystemAPI.GetComponentLookup<LocalTransform>();
             var linkedLookup = SystemAPI.GetBufferLookup<LinkedEntityGroup>();
+            var gameState = SystemAPI.GetSingletonRW<GameState>();
 
             var ecbSingleton = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
             var ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
@@ -30,6 +37,7 @@ namespace Pooong
                 HeartBreakerLookup = heartBreakerLookup,
                 TransformLookup = transformLookup,
                 LinkedLookup = linkedLookup,
+                GameState = gameState,
                 Ecb = ecb
             }.Schedule(simulation, state.Dependency);
         }
@@ -41,6 +49,7 @@ namespace Pooong
             public ComponentLookup<HeartBreaker> HeartBreakerLookup;
             public ComponentLookup<LocalTransform> TransformLookup;
             public BufferLookup<LinkedEntityGroup> LinkedLookup;
+            [NativeDisableUnsafePtrRestriction] public RefRW<GameState> GameState;
             public EntityCommandBuffer Ecb;
 
             [BurstCompile]
@@ -74,6 +83,8 @@ namespace Pooong
                 var entity = Ecb.Instantiate(heart.ValueRO.FragileHeartPrefab);
 
                 Ecb.DestroyEntity(heartEntity);
+
+                Interlocked.Increment(ref GameState.ValueRW.BrokenHeartCount);
             }
         }
     }
