@@ -891,6 +891,7 @@ MonoBehaviour:
   PlayerMovementInputSensitivity: 0.5
   GravityFactorInCart: 20
   SlowFactor: 0.5
+  CartMovementFactor: 1.25
 --- !u!4 &1486500561
 Transform:
   m_ObjectHideFlags: 0
