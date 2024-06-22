@@ -7,9 +7,6 @@ namespace Pooong
     public class HeartSpawnerAuthoring : MonoBehaviour
     {
         public GameObject HeartPrefab;
-        public float SpawnRadius;
-        public float InitialVelocityMin;
-        public float InitialVelocityMax;
 
         public class Baker : Baker<HeartSpawnerAuthoring>
         {
@@ -20,9 +17,6 @@ namespace Pooong
                 AddComponent(entity, new HeartSpawner
                 {
                     HeartPrefab = GetEntity(authoring.HeartPrefab, TransformUsageFlags.Dynamic),
-                    SpawnRadius = authoring.SpawnRadius,
-                    InitialVelocityMin = authoring.InitialVelocityMin,
-                    InitialVelocityMax = authoring.InitialVelocityMax
                 });
             }
         }
@@ -31,8 +25,5 @@ namespace Pooong
     public struct HeartSpawner : IComponentData
     {
         public Entity HeartPrefab;
-        public float SpawnRadius;
-        public float InitialVelocityMin;
-        public float InitialVelocityMax;
     }
 }

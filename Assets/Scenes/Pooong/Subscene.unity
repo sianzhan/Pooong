@@ -320,6 +320,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 826e5f10a27444d42b7cf7dce5427ad4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AnimationFPS: 6
   MoveAnims:
   - {fileID: 21300000, guid: 416609612734e7a4ab3d9eb5fb9ff645, type: 3}
   - {fileID: 21300000, guid: a8e21285a6a18a34385b4f9013ba5f76, type: 3}
@@ -895,6 +896,49 @@ MonoBehaviour:
   GravityFactorInCart: 20
   SlowFactor: 0.5
   CartMovementFactor: 1.25
+  StageConfigs:
+  - RequiredHearts: 0
+    AvailableHearts: 0
+    MaxConcurrentHearts: 0
+    InitialHeartVelocityMin: 0
+    InitialHeartVelocityMax: 0
+    SpawnRadius: 0
+    SpawnInterval: 0
+  - RequiredHearts: 0
+    AvailableHearts: 10
+    MaxConcurrentHearts: 1
+    InitialHeartVelocityMin: 7
+    InitialHeartVelocityMax: 7
+    SpawnRadius: 1
+    SpawnInterval: 1
+  - RequiredHearts: 3
+    AvailableHearts: 20
+    MaxConcurrentHearts: 2
+    InitialHeartVelocityMin: 7
+    InitialHeartVelocityMax: 10
+    SpawnRadius: 1
+    SpawnInterval: 1
+  - RequiredHearts: 10
+    AvailableHearts: 30
+    MaxConcurrentHearts: 3
+    InitialHeartVelocityMin: 8
+    InitialHeartVelocityMax: 12
+    SpawnRadius: 2
+    SpawnInterval: 0.5
+  - RequiredHearts: 15
+    AvailableHearts: 50
+    MaxConcurrentHearts: 5
+    InitialHeartVelocityMin: 10
+    InitialHeartVelocityMax: 15
+    SpawnRadius: 3
+    SpawnInterval: 0.5
+  - RequiredHearts: 25
+    AvailableHearts: 100
+    MaxConcurrentHearts: 20
+    InitialHeartVelocityMin: 10
+    InitialHeartVelocityMax: 15
+    SpawnRadius: 3
+    SpawnInterval: 0
 --- !u!4 &1486500561
 Transform:
   m_ObjectHideFlags: 0
@@ -1008,9 +1052,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HeartPrefab: {fileID: 2645215813012900243, guid: 5ccb884b29c21614683508365e7eeafc, type: 3}
-  SpawnRadius: 3
-  InitialVelocityMin: 5
-  InitialVelocityMax: 10
 --- !u!1 &1777050176
 GameObject:
   m_ObjectHideFlags: 0
@@ -1423,7 +1464,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1887613830}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 2ccf2da4dfbae6f4da083060f464d1f5, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

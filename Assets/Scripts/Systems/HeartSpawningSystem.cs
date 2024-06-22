@@ -13,42 +13,65 @@ namespace Pooong
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<PooongConfig>();
+            state.RequireForUpdate<PooongStageConfig>();
+            state.RequireForUpdate<GameState>();
+            state.RequireForUpdate<HeartSpawner>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            if (GetHeartCount(ref state) < SystemAPI.GetSingleton<PooongConfig>().MaxConcurrentHeartAmount)
+            var spawner = SystemAPI.GetSingleton<HeartSpawner>();
+            var stageConfigs = SystemAPI.GetSingletonBuffer<PooongStageConfig>();
+            var gameState = SystemAPI.GetSingletonRW<GameState>();
+            var currentStageConfig = stageConfigs[gameState.ValueRO.CurrentStage];
+
+            if (ShouldSpawnHeart(ref state, gameState, currentStageConfig))
             {
-                SpawnHeart(ref state);
+                SpawnHeart(ref state, gameState, currentStageConfig, spawner);
             }
         }
 
         [BurstCompile]
-        private int GetHeartCount(ref SystemState state)
+        private int GetFreeHeartCount(ref SystemState state)
         {
-            var query = SystemAPI.QueryBuilder().WithAll<Heart>().Build();
+            var queryHeartNotInCart = SystemAPI.QueryBuilder().WithAll<Heart>().WithNone<CartItem>().Build();
 
-            return query.CalculateEntityCount();
+            return queryHeartNotInCart.CalculateEntityCount();
         }
 
         [BurstCompile]
-        private void SpawnHeart(ref SystemState state)
+        private bool ShouldSpawnHeart(ref SystemState state, RefRW<GameState> game, in PooongStageConfig currentStageConfig)
         {
-            var spawner = SystemAPI.GetSingleton<HeartSpawner>();
+            var heartCount = GetFreeHeartCount(ref state);
 
+            if (heartCount >= currentStageConfig.MaxConcurrentHearts) return false;
+            if (game.ValueRO.AmountSpawnedThisStage >= currentStageConfig.AvailableHearts) return false;
+            if (SystemAPI.Time.ElapsedTime < game.ValueRO.LastSpawnTime + currentStageConfig.SpawnInterval) return false;
+
+            return true;
+        }
+
+        [BurstCompile]
+        private void SpawnHeart(ref SystemState state, RefRW<GameState> game, in PooongStageConfig currentStageConfig, in HeartSpawner spawner)
+        {
             var heart = state.EntityManager.Instantiate(spawner.HeartPrefab);
-            var position = new float3(GetRandomXY(spawner.SpawnRadius), 0f);
+            var position = new float3(GetRandomXY(currentStageConfig.SpawnRadius), 0f);
+
+            position.y += 2;
 
             state.EntityManager.SetComponentData(heart, LocalTransform.FromPosition(position));
 
-            var velocityFactor = UnityEngine.Random.Range(spawner.InitialVelocityMin, spawner.InitialVelocityMax);
+            var velocityFactor = UnityEngine.Random.Range(currentStageConfig.InitialHeartVelocityMin, currentStageConfig.InitialHeartVelocityMax);
             var velocity = new float3(math.normalize(GetRandomXY()) * velocityFactor, 0f);
 
             state.EntityManager.SetComponentData(heart, new PhysicsVelocity
             {
                 Linear = velocity
             });
+
+            game.ValueRW.AmountSpawnedThisStage += 1;
+            game.ValueRW.LastSpawnTime = SystemAPI.Time.ElapsedTime;
         }
 
         [BurstCompile]

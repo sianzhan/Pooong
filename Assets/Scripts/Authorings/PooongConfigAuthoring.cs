@@ -1,3 +1,5 @@
+using System;
+using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
@@ -11,6 +13,7 @@ namespace Pooong
         public float GravityFactorInCart = 20f;
         public float SlowFactor = 0.5f;
         public float CartMovementFactor = 1f;
+        public PooongStageConfig[] StageConfigs;
 
         public class Baker : Baker<PooongConfigAuthoring>
         {
@@ -25,8 +28,11 @@ namespace Pooong
                     PlayerMovementInputSensitivity = authoring.PlayerMovementInputSensitivity,
                     GravityFactorInCart = authoring.GravityFactorInCart,
                     SlowFactor = authoring.SlowFactor,
-                    CartMovementFactor = authoring.CartMovementFactor
+                    CartMovementFactor = authoring.CartMovementFactor,
                 });
+
+                var stageConfigs = AddBuffer<PooongStageConfig>(entity);
+                stageConfigs.CopyFrom(authoring.StageConfigs);
             }
         }
     }
@@ -39,5 +45,17 @@ namespace Pooong
         public float GravityFactorInCart;
         public float SlowFactor;
         public float CartMovementFactor;
+    }
+
+    [Serializable]
+    public struct PooongStageConfig : IBufferElementData
+    {
+        public int RequiredHearts;
+        public int AvailableHearts;
+        public int MaxConcurrentHearts;
+        public float InitialHeartVelocityMin;
+        public float InitialHeartVelocityMax;
+        public float SpawnRadius;
+        public float SpawnInterval;
     }
 }
